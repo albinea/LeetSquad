@@ -21,7 +21,6 @@ Dashboard View
 
 <img width="1920" height="1020" alt="Screenshot 2025-08-03 203700" src="https://github.com/user-attachments/assets/cc7d53f1-3aa4-4482-8a12-386c15488193" />
 
-**Group Chat + Leaderboard**  
 
 
 ---
@@ -33,6 +32,8 @@ Dashboard View
 - **Real-Time:** WebSockets, Daphne, Channels Redis
 - **Database:** SQLite (default), can be changed to PostgreSQL/MySQL
 - **APIs:** LeetCode stats API
+- 
+- **Group Chat + Leaderboard**  
 <img width="1920" height="1020" alt="Screenshot 2025-08-03 203821" src="https://github.com/user-attachments/assets/df4f3650-1a9f-4aad-9054-f39ad564f3ec" />
 
 ---

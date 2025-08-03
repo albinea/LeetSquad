@@ -58,3 +58,23 @@ python manage.py createsuperuser
 Run the development server with Daphne
 
 daphne -p 8000 leetsquad.asgi:application
+
+
+Project Structure
+
+leetsquad/
+├── core/                  # Main application
+│   ├── migrations/        # Database migrations
+│   ├── templates/         # HTML templates
+│   ├── consumers.py       # WebSocket handlers
+│   ├── models.py          # Database models
+│   ├── routing.py         # WebSocket routing
+│   ├── urls.py            # Application URLs
+│   ├── utils.py           # LeetCode scraping utility
+│   └── views.py           # Application views
+├── leetsquad/             # Project configuration
+│   ├── asgi.py            # ASGI configuration
+│   ├── settings.py        # Django settings
+│   └── urls.py            # Project URLs
+├── static/                # Static assets
+└── manage.py              # Django management script

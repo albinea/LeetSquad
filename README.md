@@ -60,3 +60,7 @@ Run the development server with Daphne
 daphne -p 8000 leetsquad.asgi:application
 
 
+👥 Contributors
+Nijoy P Jose
+https://github.com/NIJOY-P-JOSE
+

@@ -39,7 +39,6 @@ Dashboard View
 
 
 
-https://github.com/user-attachments/assets/24d62907-052d-4592-9b43-9b8f56468177
 
 
 ---

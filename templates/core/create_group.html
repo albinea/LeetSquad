@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Group - LeetSquad{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Create New Group</h2>
+    
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        
+        <div>
+            <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-gray-700">Group Name</label>
+            {{ form.name }}
+            {% if form.name.errors %}
+                <div class="text-red-500 text-sm mt-1">{{ form.name.errors.0 }}</div>
+            {% endif %}
+        </div>
+        
+        <div>
+            <label for="{{ form.description.id_for_label }}" class="block text-sm font-medium text-gray-700">Description</label>
+            {{ form.description }}
+            {% if form.description.errors %}
+                <div class="text-red-500 text-sm mt-1">{{ form.description.errors.0 }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="flex space-x-3">
+            <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200">
+                Create Group
+            </button>
+            <a href="{% url 'dashboard' %}" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md text-center transition duration-200">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

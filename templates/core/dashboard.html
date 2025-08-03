@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - LeetSquad{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Main Dashboard Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-screen">
+        
+        <!-- Left Column: Group Management -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="space-y-4">
+                <!-- Action Buttons -->
+                <div class="space-y-3">
+                    <a href="{% url 'create_group' %}" 
+                       class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-md text-center block transition duration-200 transform hover:scale-105">
+                        Create Group
+                    </a>
+                    <a href="{% url 'join_group' %}" 
+                       class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-md text-center block transition duration-200 transform hover:scale-105">
+                        Join Group
+                    </a>
+                    <a href="{% url 'update_stats' %}" 
+                       class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-md text-center block transition duration-200">
+                        Update My Stats
+                    </a>
+                </div>
+                
+                <hr class="my-4">
+                
+                <!-- Groups List -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">My Groups</h3>
+                    {% if groups %}
+                        <div class="space-y-2">
+                            {% for group in groups %}
+                                <div class="group-item p-3 border border-gray-200 rounded-md hover:bg-gray-50 cursor-pointer transition duration-200"
+                                     onclick="selectGroup({{ group.id }}, '{{ group.name }}')">
+                                    <div class="flex justify-between items-center">
+                                        <span class="font-medium text-gray-800">{{ group.name }}</span>
+                                        <span class="text-sm text-gray-500">{{ group.get_member_count }} members</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mt-1">{{ group.description|truncatechars:50 }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-gray-500 text-center py-4">No groups yet. Create or join one!</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Middle Column: Group Members -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Group Members</h3>
+            <div id="members-container">
+                <p class="text-gray-500 text-center py-8">Select a group to view members</p>
+            </div>
+        </div>
+        
+        <!-- Right Column: Group Ranking -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Group Ranking</h3>
+            <div id="ranking-container">
+                <p class="text-gray-500 text-center py-8">Select a group to view rankings</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="text-center py-6">
+        <p class="text-gray-500 font-medium">dashboard</p>
+    </div>
+</div>
+
+<style>
+    .group-item.selected {
+        background-color: #dbeafe;
+        border-color: #3b82f6;
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let selectedGroupId = null;
+
+function selectGroup(groupId, groupName) {
+    // Remove previous selection
+    document.querySelectorAll('.group-item').forEach(item => {
+        item.classList.remove('selected');
+    });
+    
+    // Add selection to clicked item
+    event.currentTarget.classList.add('selected');
+    
+    selectedGroupId = groupId;
+    loadGroupMembers(groupId);
+    
+    // Add link to group detail page
+    const membersContainer = document.getElementById('members-container');
+    membersContainer.innerHTML = `
+        <div class="mb-4">
+            <a href="/group/${groupId}/" class="text-blue-600 hover:text-blue-800 font-medium">
+                → View ${groupName} Chat & Details
+            </a>
+        </div>
+        <div class="text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    `;
+}
+
+function loadGroupMembers(groupId) {
+    fetch(`/api/group/${groupId}/members/`)
+        .then(response => response.json())
+        .then(data => {
+            displayMembers(data.members);
+            displayRanking(data.members);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('members-container').innerHTML = 
+                '<p class="text-red-500 text-center">Error loading members</p>';
+        });
+}
+
+function displayMembers(members) {
+    const container = document.getElementById('members-container');
+    
+    if (members.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center">No members in this group</p>';
+        return;
+    }
+    
+    let html = `
+        <div class="mb-4">
+            <a href="/group/${selectedGroupId}/" class="text-blue-600 hover:text-blue-800 font-medium">
+                → View Group Chat & Details
+            </a>
+        </div>
+        <div class="space-y-3">
+    `;
+    
+    members.forEach(member => {
+        html += `
+            <div class="p-3 border border-gray-200 rounded-md">
+                <div class="flex justify-between items-center">
+                    <span class="font-medium">${member.username}</span>
+                    <span class="text-sm text-gray-500">${member.total_solved} solved</span>
+                </div>
+                <p class="text-sm text-gray-600">LeetCode: ${member.leetcode_username}</p>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+function displayRanking(members) {
+    const container = document.getElementById('ranking-container');
+    
+    if (members.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center">No rankings available</p>';
+        return;
+    }
+    
+    let html = '<div class="space-y-3">';
+    
+    members.forEach((member, index) => {
+        const rank = index + 1;
+        const medalColor = rank === 1 ? 'text-yellow-500' : rank === 2 ? 'text-gray-400' : rank === 3 ? 'text-yellow-600' : 'text-gray-600';
+        
+        html += `
+            <div class="flex items-center justify-between p-3 border border-gray-200 rounded-md">
+                <div class="flex items-center space-x-3">
+                    <span class="font-bold text-lg ${medalColor}">${rank}</span>
+                    <div>
+                        <p class="font-medium">${member.username}</p>
+                        <p class="text-sm text-gray-600">${member.total_solved} problems</p>
+                    </div>
+                </div>
+                <div class="text-right text-sm text-gray-500">
+                    <div>E: ${member.easy_solved}</div>
+                    <div>M: ${member.medium_solved}</div>
+                    <div>H: ${member.hard_solved}</div>
+                </div>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    container.innerHTML = html;
+}
+</script>
+{% endblock %}

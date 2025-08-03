@@ -78,3 +78,4 @@ leetsquad/
 │   └── urls.py            # Project URLs
 ├── static/                # Static assets
 └── manage.py              # Django management script
+

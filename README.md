@@ -40,26 +40,74 @@ Dashboard View
 ## ⚙️ Installation
 
 1. Clone the repository
+   ```
    git clone https://github.com/albinea/LeetSquad.git
    cd LeetSquad
+   ```
 2.Create and activate a virtual environment
+```
 python3 -m venv venv
 source venv/bin/activate
-
+```
 2.Install dependencies
+```
 pip install -r requirements.txt
-
+```
 3.Run migrations
+```
 python manage.py migrate
-
+```
 4.Create a superuser
+```
 python manage.py createsuperuser
-
+```
 Run the development server with Daphne
-
+```
 daphne -p 8000 leetsquad.asgi:application
+```
+File tree
+```
+Project_leetsquad
+├─ README.md
+├─ core
+│  ├─ __init__.py
+│  ├─ admin.py
+│  ├─ apps.py
+│  ├─ consumers.py
+│  ├─ forms.py
+│  ├─ management
+│  │  ├─ __init__.py
+│  │  └─ commands
+│  │     ├─ __init__.py
+│  │     ├─ update_leetcode_stats.py
+│  ├─ migrations
+│  │  ├─ 0001_initial.py
+│  │  └─ __init__.py
+│  ├─ models.py
+│  ├─ routing.py
+│  ├─ services.py
+│  ├─ urls.py
+│  └─ views.py
+├─ leetsquad
+│  ├─ __init__.py
+│  ├─ asgi.py
+│  ├─ settings.py
+│  ├─ urls.py
+│  └─ wsgi.py
+├─ manage.py
+├─ requirements.txt
+└─ templates
+   ├─ base.html
+   ├─ core
+   │  ├─ create_group.html
+   │  ├─ dashboard.html
+   │  ├─ group_detail.html
+   │  └─ join_group.html
+   └─ registration
+      ├─ login.html
+      └─ register.html
 
-
+```
 👥 Contributors
 Nijoy P Jose
 https://github.com/NIJOY-P-JOSE

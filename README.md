@@ -36,6 +36,12 @@ Dashboard View
  **Group Chat + Leaderboard**  
 <img width="1920" height="1020" alt="Screenshot 2025-08-03 203821" src="https://github.com/user-attachments/assets/df4f3650-1a9f-4aad-9054-f39ad564f3ec" />
 
+
+
+
+https://github.com/user-attachments/assets/24d62907-052d-4592-9b43-9b8f56468177
+
+
 ---
 
 ## ⚙️ Installation
